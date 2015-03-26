@@ -9,14 +9,13 @@ import javax.swing.JPanel;
 
 public class KochPanel extends JPanel
 {
-   private final int PANEL_WIDTH = 400;
-   private final int PANEL_HEIGHT = 400;
+   private final int PANEL_WIDTH = 1000;
+   private final int PANEL_HEIGHT = 1000;
 
-   private final double SQ = Math.sqrt(3.0) / 6;
+   private final double ANGLE = 30;
 
-   private final int TOPX = 200, TOPY = 20;
-   private final int LEFTX = 60, LEFTY = 300;
-   private final int RIGHTX = 340, RIGHTY = 300;
+   private final int TOPX = 450, TOPY = 500;
+   private final int BOTTOMX = 450, BOTTOMY = 900;
 
    private int current; //current order
 
@@ -39,28 +38,24 @@ public class KochPanel extends JPanel
    public void drawFractal (int order, int x1, int y1, int x5, int y5,
                             Graphics page)
    {
-      int deltaX, deltaY, x2, y2, x3, y3, x4, y4;
+      int deltaX, deltaY, x3, y3, tempXLeft, tempXRight, tempY;
 
       if (order == 1)
          page.drawLine (x1, y1, x5, y5);
       else
       {
-         deltaX = x5 - x1;  // distance between end points
-         deltaY = y5 - y1;
+         deltaY = (y5 - y1)/2; // distance between end points         
+         
+         tempXLeft = x1+deltaY/2;
+         tempXRight = x1-deltaY/2;
+         tempY = y1-deltaY;
+         
+         x3 = (int) (((tempY-y1)/((Math.cos(Math.toRadians(ANGLE))))));  // tip of projection
+         y3 = (int) ((y1+y5) + Math.cos(Math.toRadians(ANGLE)) * deltaY);
 
-         x2 = x1 + deltaX / 3;  // one third
-         y2 = y1 + deltaY / 3;
-
-         x3 = (int) ((x1+x5)/2 + SQ * (y1-y5));  // tip of projection
-         y3 = (int) ((y1+y5)/2 + SQ * (x5-x1));
-
-         x4 = x1 + deltaX * 2/3;  // two thirds
-         y4 = y1 + deltaY * 2/3;
-
-         drawFractal (order-1, x1, y1, x2, y2, page);
-         drawFractal (order-1, x2, y2, x3, y3, page);
-         drawFractal (order-1, x3, y3, x4, y4, page);
-         drawFractal (order-1, x4, y4, x5, y5, page);
+         drawFractal (order-1, x5, y5, x1, y1, page);
+         drawFractal (order-1, x1, y1, tempXLeft, tempY, page);
+         drawFractal (order-1, x1, y1, tempXRight, tempY, page);
       }
    }
 
@@ -73,9 +68,7 @@ public class KochPanel extends JPanel
 
       page.setColor (Color.green);
 
-      drawFractal (current, TOPX, TOPY, LEFTX, LEFTY, page);
-      drawFractal (current, LEFTX, LEFTY, RIGHTX, RIGHTY, page);
-      drawFractal (current, RIGHTX, RIGHTY, TOPX, TOPY, page);
+      drawFractal (current, TOPX, TOPY, BOTTOMX, BOTTOMY, page);
    }
 
    //-----------------------------------------------------------------
