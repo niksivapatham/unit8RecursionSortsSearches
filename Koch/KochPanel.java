@@ -52,10 +52,11 @@ public class KochPanel extends JPanel
          
          x3 = (int) (((tempY-y1)/((Math.cos(Math.toRadians(ANGLE))))));  // tip of projection
          y3 = (int) ((y1+y5) + Math.cos(Math.toRadians(ANGLE)) * deltaY);
+         System.out.println(tempXLeft);
+         System.out.println(tempY);
 
          drawFractal (order-1, x5, y5, x1, y1, page);
          drawFractal (order-1, x1, y1, tempXLeft, tempY, page);
-         drawFractal (order-1, x1, y1, tempXRight, tempY, page);
       }
    }
 
